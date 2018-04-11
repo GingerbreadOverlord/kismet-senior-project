@@ -1,0 +1,47 @@
+:root {
+  --blue:         #308695;
+  --dark-gray:    #555457;
+  --light-gray:   #B9C1D5;
+  --scroll-white: #F5F5F5;
+  --red:          #b00b35;
+  --email-blue:   #0000EE;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	font-family: 'Roboto', sans-serif;
+	height: 100vh;
+	width: 100vw;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+}
+
+.app {
+	height: 100vh;
+  	width: 100vw;
+  	position: relative;
+  	display: -webkit-flex;
+  	display: flex;
+  	-webkit-flex-direction: row;
+  	flex-direction: row;
+  	align-items: center;
+  	overflow-x: auto;
+  	overflow-y: auto;
+}
+
+.dice-container {
+	height: 50px;
+	width: 50px;
+	border-radius: 5px;
+	background-color: var(--blue);
+	color: var(--dark-gray);
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	vertical-align: middle;
+}
+
