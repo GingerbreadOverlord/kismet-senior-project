@@ -11,6 +11,10 @@ export default class SingleDice extends Component {
 		this.roll = this.roll.bind(this);
 	}
 
+	componentWillReceiveProps(nextProps) {
+		console.log(nextProps.onRoll);
+	}
+
 	componentDidMount() {
 		this.roll()
 	}

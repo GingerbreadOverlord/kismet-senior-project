@@ -20,6 +20,11 @@ body {
 	-webkit-user-select: none;
 }
 
+.all-dice-container {
+	display: flex;
+	flex-direction: row;
+}
+
 .app {
 	height: 100vh;
   	width: 100vw;
@@ -43,5 +48,26 @@ body {
 	align-items: center;
 	text-align: center;
 	vertical-align: middle;
+	margin-right: 10px;
+}
+
+.category-table {
+	position: fixed;
+	top: 0px;
+}
+
+.roll-area {
+	position: fixed;
+	bottom: 0px;
+	display: flex;
+	flex-direction: column;
+}
+
+.roll-button {
+	height: 40px;
+	width: 100px;
+	border-radius: 8px;
+	background-color: var(--red);
+	margin-bottom: 10px;
 }
 
