@@ -2,32 +2,27 @@ import React, { Component } from 'react';
 
 export default class Category extends Component {
 	constructor(props) {
-		super(props);
+		super(props);	
+		this.name = props.name;
 
 		this.state = {
-			score: 0,
-			scoredInto: false
+			score: this.props.score
 		}
-		
-		this.name = props.name;
-		this.applyRule = this.applyRule.bind(this);
+
+		this.onClick = this.onClick.bind(this);
 	}
 
-	applyRule() {
-		if (this.state.scoredInto)
-			this.props.attemptScore(-1);
-		else {
-			var dice = this.props.getDice();
-			console.log(dice);
-			var score = this.props.rule(dice);
-			this.setState({score: score, scoredInto: true});
-			this.props.attemptScore(score);
-		}
+	componentWillReceiveProps() {
+		this.setState({score: this.props.score});
+	}
+
+	onClick() {
+		
 	}
 
 	render() {
 		return (
-			<tr onClick={this.applyRule}>
+			<tr onClick={this.onClick}>
 				<td>{this.name}</td>
 				<td>{this.state.score}</td>
 			</tr>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Category from './Category.js';
+import { updateScore } from '../actions/scoreActions';
 
 export default class Categories extends Component {
 	constructor(props) {
@@ -22,8 +23,14 @@ export default class Categories extends Component {
 			fullHouseSameColor, fourOfAKind,
 			yaraborough, kismet, totalScore
 		]
+
+		this.onClick = this.onClick.bind(this);
 		this.attemptScore = this.attemptScore.bind(this);
 		this.scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	}
+
+	onClick(p1, category, score) {
+		
 	}
 
 	attemptScore(score, cat) {
@@ -43,9 +50,10 @@ export default class Categories extends Component {
 								key={name} 
 								name={name}
 								cat={i}
-								rule={threeOfAKind}
-								attemptScore={this.attemptScore}
-								getDice={this.props.getDice}
+								player={1}
+								rule={this.rules[i]}
+								onClick={this.onClick}
+								dice={this.props.dice}
 							/>
 						)
 					})}
@@ -53,6 +61,16 @@ export default class Categories extends Component {
 			</table>
 		)
 	}
+}
+
+const mapStateToProps = state => ({
+	dice: state.dice.values_rolled,
+	p1_categories: state.score.p1_categories,
+	p2_categories: state.score.p2_categories
+})
+
+const mapDispatchToProps = {
+	updateScore
 }
 
 var colors = {1: 6, 6: 1, 2: 5, 5: 2, 3: 4, 4: 3};

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import Dice from './Dice.js';
-import Categories from './Categories.js';
+import Board from './Board'
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+import store from '../store.js';
 
 export default class App extends Component {
 	constructor(props) {
@@ -20,10 +23,9 @@ export default class App extends Component {
 
 	render() {
 	return (
-	  <div className='app'>
-	  	<Categories getDice={this.getDice}/>
-	    <Dice getDice={this.getDice}/>
-	  </div>
+		<Provider store={store}>
+		  <Board />
+		</Provider>
 	);
 	}
 }
