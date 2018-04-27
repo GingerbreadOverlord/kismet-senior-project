@@ -38,6 +38,18 @@ body {
   	overflow-y: auto;
 }
 
+.cat-button {
+	height: 20px;
+	width: 20px;
+	border-radius: 10px;
+	background-color: var(--email-blue);
+}
+
+.category-table {
+	position: fixed;
+	top: 0px;
+}
+
 .dice-container {
 	height: 50px;
 	width: 50px;
@@ -49,11 +61,6 @@ body {
 	text-align: center;
 	vertical-align: middle;
 	margin-right: 10px;
-}
-
-.category-table {
-	position: fixed;
-	top: 0px;
 }
 
 .roll-area {

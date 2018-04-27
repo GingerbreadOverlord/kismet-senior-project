@@ -19,35 +19,36 @@ class Category extends Component {
 
 	tryMove(score) {
 		var p1 = this.props.player == 1;
-		if (p1) {
-			if (this.props.p1_cats[this.props.cat] == null) {
-				var updated_categories = this.props.p1_cats.slice();
-				updated_categories[this.props.cat] = score;
-				updated_categories[15] += score;
-				this.props.updateScore(p1, updated_categories);
-				this.props.updateTurn();
-			}
-			else {
-				console.log("Category already scored into")
-			}
-		}
-		else {
-			if (this.props.p2_cats[this.props.cat] != null) {
-				this.props.updateScore(p1, score);
-			}
-			else {
-				console.log("Category already scored into")
-			}
-		}
+		var updated_categories;
+		updated_categories = p1 ? this.props.p1_cats.slice() : this.props.p2_cats.slice();
+		updated_categories[this.props.cat] = score;
+		updated_categories[15] += score;
+		this.props.updateScore(p1, updated_categories);
+		this.props.updateTurn();
 	}
 
 	render() {
+		var which_cat = 
+			this.props.player == 1 ? 
+			(this.props.p1_cats[this.props.cat] == null ? this.blank : this.props.p1_cats[this.props.cat]) : 
+			(this.props.p2_cats[this.props.cat] == null ? this.blank : this.props.p2_cats[this.props.cat]);
+
+		var already_scored = 
+			this.props.player == 1 ?
+			(this.props.p1_cats[this.props.cat] == null ? false : true) :
+			(this.props.p2_cats[this.props.cat] == null ? false : true);
+
 		return (
-			<tr onClick={this.onClick}>
+			<tr>
 				<td>{this.props.name}</td>
-				<td>{this.props.player == 1 ? 
-					(this.props.p1_cats[this.props.cat] == null ? this.blank : this.props.p1_cats[this.props.cat]) : 
-					(this.props.p2_cats[this.props.cat] == null ? this.blank : this.props.p2_cats[this.props.cat])}</td>
+				<td>{which_cat}</td>
+				<td>
+					<button 
+						className='cat-button' 
+						onClick={this.onClick}
+						disabled={already_scored}
+					/>
+				</td>
 			</tr>
 		)
 	}
