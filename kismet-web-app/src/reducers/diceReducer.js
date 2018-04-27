@@ -1,7 +1,8 @@
-import { UPDATE_DICE } from '../actions/constants';
+import { UPDATE_DICE, RESET_ROLLS } from '../actions/constants';
 
 const initialState = {
-	roll_values: Array(5).fill(null)
+	roll_values: Array(5).fill(null),
+	rolls_left: 3
 }
 
 export default function(state=initialState, action) {
@@ -9,8 +10,14 @@ export default function(state=initialState, action) {
 		case UPDATE_DICE:
 			return {
 				...state,
-				roll_values: action.roll_values
-			};		
+				roll_values: action.roll_values,
+				rolls_left: state.rolls_left - 1
+			};
+		case RESET_ROLLS:
+			return {
+				...state,
+				rolls_left: 3
+			}		
 		default:
 			return state;
 	}

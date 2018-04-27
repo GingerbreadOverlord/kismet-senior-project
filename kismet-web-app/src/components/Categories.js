@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Category from './Category.js';
-import { updateScore } from '../actions/scoreActions';
 
 export default class Categories extends Component {
 	constructor(props) {
@@ -23,21 +22,6 @@ export default class Categories extends Component {
 			fullHouseSameColor, fourOfAKind,
 			yaraborough, kismet, totalScore
 		]
-
-		this.onClick = this.onClick.bind(this);
-		this.attemptScore = this.attemptScore.bind(this);
-		this.scores = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	}
-
-	onClick(p1, category, score) {
-		
-	}
-
-	attemptScore(score, cat) {
-		console.log(score);
-		if (score > -1) {
-			this.scores[cat] = score;
-		} 
 	}
 
 	render() {
@@ -52,8 +36,6 @@ export default class Categories extends Component {
 								cat={i}
 								player={1}
 								rule={this.rules[i]}
-								onClick={this.onClick}
-								dice={this.props.dice}
 							/>
 						)
 					})}
@@ -61,16 +43,6 @@ export default class Categories extends Component {
 			</table>
 		)
 	}
-}
-
-const mapStateToProps = state => ({
-	dice: state.dice.values_rolled,
-	p1_categories: state.score.p1_categories,
-	p2_categories: state.score.p2_categories
-})
-
-const mapDispatchToProps = {
-	updateScore
 }
 
 var colors = {1: 6, 6: 1, 2: 5, 5: 2, 3: 4, 4: 3};
@@ -81,6 +53,15 @@ function sameColor(d1, d2) {
 
 function allSameRoll(dice) {
 	return dice[0] == dice[1] == dice[2] == dice[3] == dice[4];
+}
+
+function areEqual(){
+   var len = arguments.length;
+   for (var i = 1; i< len; i++){
+      if (arguments[i] === null || arguments[i] !== arguments[i-1])
+         return false;
+   }
+   return true;
 }
 
 function matchNum(array, num) {
@@ -139,15 +120,16 @@ function twoPairSameColor(dice) {
 
 function threeOfAKind(dice) {
 	for (var i = 0; i < 3; i++) {
-		if (dice[i] == dice[i+1] == dice[i+2])
+		if (areEqual(dice[i], dice[i+1], dice[i+2])) {
 			return dice.reduce(getSum);
+		}
 	}
 
 	return 0;
 }
 
 function straight(dice) {
-	if (dice[4] == dice[3] + 1 == dice[2] + 2 == dice[1] + 3 == dice[0] + 4)
+	if (areEqual(dice[4], dice[3] + 1, dice[2] + 2, dice[1] + 3, dice[0] + 4))
 		return 30;
 
 	return 0;
@@ -173,7 +155,7 @@ function fullHouse(dice) {
 		var pairx = dice[way[1]];
 		var pairy = dice[way[2]];
 
-		if (three[0] == three[1] == three[2] && pairx == pairy)
+		if (areEqual(three[0], three[1], three[2]) && pairx == pairy)
 			return dice.reduce(getSum) + 15;
 	});
 
@@ -193,7 +175,7 @@ function fullHouseSameColor(dice) {
 		var pairx = dice[way[1]];
 		var pairy = dice[way[2]];
 
-		if (three[0] == three[1] == three[2] && pairx == pairy && sameColor(three[0], pairx))
+		if (areEqual(three[0], three[1], three[2]) && pairx == pairy && sameColor(three[0], pairx))
 			return dice.reduce(getSum) + 15;
 	});
 
@@ -202,7 +184,7 @@ function fullHouseSameColor(dice) {
 
 function fourOfAKind(dice) {
 	for (var i = 0; i < 2; i++) {
-		if (dice[i] == dice[i+1] == dice[i+2] == dice[i+3])
+		if (areEqual(dice[i], dice[i+1], dice[i+2], dice[i+3]))
 			return dice.reduce(getSum) + 25;
 	}
 

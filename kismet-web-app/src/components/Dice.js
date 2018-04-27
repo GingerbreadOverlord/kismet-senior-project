@@ -8,21 +8,28 @@ class Dice extends Component {
 		super(props)
 
 		this.state = {
-			timesRolled: 0,
-			highlighted: [true, true, true, true, true]
+			highlighted: Array(5).fill(true)
 		}
 
-		this.dice = [1, 2, 3, 4, 5];
-		this.onClick = this.onClick.bind(this);
+		this.onRoll = this.onRoll.bind(this);
 		this.onToggle = this.onToggle.bind(this);
 	}
 
-
+	// returns a random die value between 1 and 6 inclusive
 	roll() {
 		return Math.floor(Math.random() * 6) + 1
 	}
 
-	onClick() {
+	allFalse(arr) {
+		for (let i = 0; i < arr.length; i++) {
+			if (arr[i])
+				return false;
+		}
+
+		return true;
+	}
+
+	onRoll() {
 		var new_rolls = [1, 1, 1, 1, 1];
 
 		for (var i = 0; i < this.state.highlighted.length; i++) {
@@ -32,20 +39,28 @@ class Dice extends Component {
 				new_rolls[i] = this.props.roll_values[i];
 		}
 
+		
+		this.setState({highlighted: Array(5).fill(false)}) // unhighlight all dice after a roll
 		this.props.updateDice(new_rolls);
 	}
 
 	onToggle(n) {
+		if (!this.props.rolls_left) // don't allow highlighting if rolls left == 0
+			return;
+
 		var highlighted = this.state.highlighted.slice();
 		highlighted[n] = !highlighted[n];
-		console.log(highlighted);
 		this.setState({highlighted: highlighted});
 	}
 
 	render() {
 		return (
 			<div className='roll-area'>
-				<div className='roll-button' onClick={this.onClick}>Roll</div>
+				<button 
+					className='roll-button'
+					disabled={this.allFalse(this.state.highlighted) || !this.props.rolls_left} 
+					onClick={this.onRoll}>Roll
+				</button>
 				<div className='all-dice-container'>
 					{this.dice.map((dice_num, i) => {
 						return (
@@ -61,14 +76,9 @@ class Dice extends Component {
 }
 
 const mapStateToProps = state => ({
-	roll_values: state.dice.roll_values
+	roll_values: state.dice.roll_values,
+	rolls_left: state.dice.rolls_left
 });
-
-//const mapDispatchToProps = dispatch => {
-//	return {
-//		updateDice: bindActionCreators(updateDice, dispatch)
-//	};
-//}
 
 const mapDispatchToProps = {
 	updateDice

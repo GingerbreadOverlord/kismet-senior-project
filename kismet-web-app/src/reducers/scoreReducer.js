@@ -1,13 +1,14 @@
-import { UPDATE_SCORE } form '../actions/constants';
+import { UPDATE_SCORE } from '../actions/constants';
 
 const initialState = {
 	p1_categories: Array(15).fill(null),
-	p2_categories: Array(15).fill(null),
+	p2_categories: Array(15).fill(null)
 }
 
 export default function(state=initialState, action) {
 	switch(action.type) {
-		case UPDATE_CATEGORY:
+		case UPDATE_SCORE:
+			//console.log(action);
 			if (action.p1) {
 				return {
 					...state,
@@ -20,5 +21,7 @@ export default function(state=initialState, action) {
 					p2_categories: action.updated_categories
 				};
 			}
+		default:
+			return state;
 	}
 }
