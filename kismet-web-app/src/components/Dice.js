@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateDice } from '../actions/diceActions';
+import { updateDice } from '../actions/boardActions';
 
 class Dice extends Component {
 	constructor(props) {
@@ -20,7 +20,8 @@ class Dice extends Component {
 		return Math.floor(Math.random() * 6) + 1
 	}
 
-	allFalse(arr) {
+	// returns true if all dice are unhighlighted
+	unhighlighted(arr) {
 		for (let i = 0; i < arr.length; i++) {
 			if (arr[i])
 				return false;
@@ -58,14 +59,14 @@ class Dice extends Component {
 			<div className='roll-area'>
 				<button 
 					className='roll-button'
-					disabled={this.allFalse(this.state.highlighted) || !this.props.rolls_left} 
+					disabled={this.unhighlighted(this.state.highlighted) || !this.props.rolls_left} 
 					onClick={this.onRoll}>Roll
 				</button>
 				<div className='all-dice-container'>
-					{this.dice.map((dice_num, i) => {
+					{this.props.dice.map((dice_num, i) => {
 						return (
 							<div className='dice-container' key={i} onClick={() => this.onToggle(i)}>	
-								{this.props.roll_values[i]}
+								{this.props.dice[i]}
 							</div>
 						)
 					})}
@@ -76,8 +77,8 @@ class Dice extends Component {
 }
 
 const mapStateToProps = state => ({
-	roll_values: state.dice.roll_values,
-	rolls_left: state.dice.rolls_left
+	dice: state.board.dice,
+	rolls_left: state.board.rolls_left
 });
 
 const mapDispatchToProps = {

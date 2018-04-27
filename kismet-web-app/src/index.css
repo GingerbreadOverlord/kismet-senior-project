@@ -71,3 +71,9 @@ body {
 	margin-bottom: 10px;
 }
 
+.round-dummy {
+	position: fixed;
+	right: 0px;
+	top: 0px;
+}
+

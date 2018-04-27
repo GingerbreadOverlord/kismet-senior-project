@@ -1,9 +1,11 @@
-import { UPDATE_TURN, NUM_PLAYERS } from '../actions/constants';
+import { UPDATE_TURN, NUM_PLAYERS, UPDATE_DICE } from '../actions/constants';
 
 const initialState = {
 	turn: 0,
 	round: 1,
-	players: 1
+	players: 1,
+	dice: Array(5).fill(null),
+	rolls_left: 3
 }
 
 export default function(state=initialState, action) {
@@ -29,6 +31,12 @@ export default function(state=initialState, action) {
 				...state,
 				turn: next_turn,
 				round: next_round
+			};
+		case UPDATE_DICE:
+			return {
+				...state,
+				dice: action.dice,
+				rolls_left: state.rolls_left - 1
 			};
 		default:
 			return state;
