@@ -105,6 +105,8 @@ function twoPairSameColor(dice) {
 	// there are 3 ways we can make a 2 pair with sorted dice
 	// each int represents the start index of a pair
 	var ways = [[0, 2], [0, 3], [1, 3]];
+	var value = 0;
+
 	ways.forEach((way) => {
 		var x1 = dice[way[0]];
 		var x2 = dice[way[0] + 1];
@@ -112,10 +114,10 @@ function twoPairSameColor(dice) {
 		var y2 = dice[way[1] + 1];
 
 		if (x1 == x2 && y1 == y2 && sameColor(x1, y1))
-			return dice.reduce(getSum);
+			value = dice.reduce(getSum);
 	});
 
-	return 0;
+	return value;
 }
 
 function threeOfAKind(dice) {
@@ -146,7 +148,8 @@ function fullHouse(dice) {
 	// there are 3 ways we can make a full house with sorted cards
 	// the following triples represent: (start index of 3 of a kind, index of card 4, index of card 5)
 	var ways = [[0, 3, 4], [1, 0, 4], [2, 0, 1]];
-	
+	var value = 0;
+
 	if (allSameRoll(dice))
 		return 0;
 
@@ -156,17 +159,18 @@ function fullHouse(dice) {
 		var pairy = dice[way[2]];
 
 		if (areEqual(three[0], three[1], three[2]) && pairx == pairy)
-			return dice.reduce(getSum) + 15;
+			value = dice.reduce(getSum) + 15;
 	});
 
-	return 0;
+	return value;
 }
 
 function fullHouseSameColor(dice) {
 	// there are 3 ways we can make a full house with sorted cards
 	// the following triples represent: (start index of 3 of a kind, index of card 4, index of card 5)
-	var ways = [[0, 3, 4], [1, 0, 4], [2, 0, 1]];
-	
+	var ways = [[0, 3, 4], [2, 0, 1]];
+	var value = 0;
+
 	if (allSameRoll(dice))
 		return 0;
 
@@ -175,11 +179,12 @@ function fullHouseSameColor(dice) {
 		var pairx = dice[way[1]];
 		var pairy = dice[way[2]];
 
-		if (areEqual(three[0], three[1], three[2]) && pairx == pairy && sameColor(three[0], pairx))
-			return dice.reduce(getSum) + 15;
+		if (areEqual(three[0], three[1], three[2]) && (pairx == pairy) && sameColor(three[0], pairx)) {
+			value = dice.reduce(getSum) + 15;
+		}
 	});
 
-	return 0;
+	return value;
 }
 
 function fourOfAKind(dice) {
