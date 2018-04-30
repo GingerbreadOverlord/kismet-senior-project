@@ -1,4 +1,4 @@
-import { UPDATE_SCORE } from './constants.js';
+import { UPDATE_SCORE, RESET_SCORES } from './constants.js';
 
 export const updateScore = (p1, score, cat) => ({
 	type: UPDATE_SCORE,
@@ -6,3 +6,7 @@ export const updateScore = (p1, score, cat) => ({
 	score: score,
 	cat: cat
 });
+
+export const resetScores = () => ({
+	type: RESET_SCORES
+})

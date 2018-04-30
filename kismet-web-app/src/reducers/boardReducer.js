@@ -1,12 +1,13 @@
-import { UPDATE_TURN, NUM_PLAYERS, UPDATE_DICE, TOGGLE_HIGHLIGHTED } from '../actions/constants';
+import { UPDATE_TURN, NUM_PLAYERS, UPDATE_DICE, TOGGLE_HIGHLIGHTED, RESET_BOARD, GAME_IS_OVER } from '../actions/constants';
 
 const initialState = {
 	turn: 1,
-	round: 1,
+	round: 15,
 	players: 2,
 	dice: Array(5).fill(null),
 	highlighted: Array(5).fill(true),
-	rolls_left: 3
+	rolls_left: 3,
+	game_over: false
 }
 
 export default function(state=initialState, action) {
@@ -46,6 +47,13 @@ export default function(state=initialState, action) {
 				...state,
 				highlighted: action.highlighted
 			}
+		case GAME_IS_OVER:
+			return {
+				...state,
+				game_over: true
+			}
+		case RESET_BOARD:
+			return initialState;
 		default:
 			return state;
 	}

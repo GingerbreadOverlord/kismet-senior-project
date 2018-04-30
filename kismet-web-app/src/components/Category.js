@@ -28,8 +28,8 @@ class Category extends Component {
 			(this.props.p1_cats[this.props.cat] == null ? false : true) :
 			(this.props.p2_cats[this.props.cat] == null ? false : true);
 		
-		var magenta = '#FF00FF';
-		var blue = '0000EE';
+		var style_p1 = { 'backgroundColor': '#0000EE' };
+		var style_p2 = { 'backgroundColor': '#FF00FF' };
 
 		return (
 			<tr>
@@ -40,8 +40,7 @@ class Category extends Component {
 						className='cat-button' 
 						onClick={this.onClick}
 						disabled={already_scored || this.props.player != this.props.turn || this.props.rolls_left == 3}
-						style={this.props.player == 1 ? 
-						{'background-color': blue} : {'background-color': magenta} }
+						style={this.props.player == 1 ? style_p1 : style_p2}
 					/>
 				</td>
 			</tr>

@@ -2,46 +2,47 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Categories from './Categories';
 import Dice from './Dice';
+import GameOver from './GameOver';
+import GameInfo from './GameInfo';
+import { gameIsOver } from '../actions/boardActions';
 
 class Board extends Component {
+	constructor(props) {
+		super(props);
+	}
+
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.round == 16) 
-			this.gameOver();
-	}
-
-	gameOver() {
-		console.log("Game over!");
-	}
-
-	checkBonus() {
-		
+			this.props.gameIsOver();
+		console.log(this.props.game_over);
 	}
 
 	render() {
 		return (
 			<div className='board'>
-				<div className='round-dummy'>
-				Round: {this.props.round} <br /> 
-				player {this.props.turn}'s turn <br />
-				{this.props.rolls_left} rolls left 
-				</div>	
+				{this.props.game_over ? <GameOver /> : null}
+				<div className='board-tools-container'>
+					<GameInfo />
+					<Dice />
+				</div>
 				<div className='category-container'>			
 					<Categories player={1}/>
 					<Categories player={2}/>
 				</div>
-			    <Dice />
 			</div>
 		);
 	}
 }
 
 const mapStateToProps = state => ({
-	round: state.board.round,
-	turn: state.board.turn,
 	p1_cats: state.score.p1_categories,
 	p2_cats: state.score.p2_categories,
 	dice: state.board.dice,
-	rolls_left: state.board.rolls_left
+	game_over: state.board.game_over
 })
 
-export default connect(mapStateToProps)(Board);
+const mapDispatchToProps = {
+	gameIsOver
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);

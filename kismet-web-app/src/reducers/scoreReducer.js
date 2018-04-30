@@ -1,12 +1,12 @@
-import { UPDATE_SCORE } from '../actions/constants';
+import { UPDATE_SCORE, RESET_SCORES } from '../actions/constants';
 
 const initialState = {
 	p1_total: 0,
 	p2_total: 0,
 	p1_bonus: 0,
 	p2_bonus: 0,
-	p1_categories: [62, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
-	p2_categories: [75, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+	p1_categories: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+	p2_categories: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
 }
 
 export default function(state=initialState, action) {
@@ -54,6 +54,8 @@ export default function(state=initialState, action) {
 					p2_bonus: bonus
 				};
 			}
+		case RESET_SCORES:
+			return initialState;
 		default:
 			return state;
 	}
