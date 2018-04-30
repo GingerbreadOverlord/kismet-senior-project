@@ -34,7 +34,7 @@ export default class Categories extends Component {
 								key={name} 
 								name={name}
 								cat={i}
-								player={1}
+								player={this.props.player}
 								rule={this.rules[i]}
 							/>
 						)

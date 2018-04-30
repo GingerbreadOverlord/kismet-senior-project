@@ -20,8 +20,11 @@ class Board extends Component {
 				Round: {this.props.round} <br /> 
 				player {this.props.turn + 1}'s turn <br />
 				{this.props.rolls_left} rolls left 
-				</div>				
-				<Categories />
+				</div>	
+				<div className='category-container'>			
+					<Categories player={1}/>
+					<Categories player={2}/>
+				</div>
 			    <Dice />
 			</div>
 		);
