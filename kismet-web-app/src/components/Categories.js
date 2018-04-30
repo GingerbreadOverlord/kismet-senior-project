@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import Category from './Category.js';
+import Category from './Category';
+import BonusAndTotal from './BonusAndTotal'
 
 export default class Categories extends Component {
 	constructor(props) {
 		super(props);
 
-		this.names = [
+		this.cat_names = [
 			'Ones', 'Twos', 'Threes', 
 			'Fours', 'Fives', 'Sixes',
 			'Two Pair Same Color', 'Three Of A Kind',
 			'Straight', 'Flush', 'FullHouse',
 			'Full House Same Color', 'Four Of A Kind',
-			'Yaraborough', 'Kismet', 'Total Score'
+			'Yaraborough', 'Kismet'
 		]
 
 		this.rules = [
@@ -20,7 +21,7 @@ export default class Categories extends Component {
 			twoPairSameColor, threeOfAKind,
 			straight, flush, fullHouse,
 			fullHouseSameColor, fourOfAKind,
-			yaraborough, kismet, totalScore
+			yaraborough, kismet
 		]
 	}
 
@@ -28,7 +29,7 @@ export default class Categories extends Component {
 		return (
 			<table className='category-table'>
 				<tbody>
-					{this.names.map((name, i) => {
+					{this.cat_names.map((name, i) => {
 						return (
 							<Category 
 								key={name} 
@@ -39,6 +40,14 @@ export default class Categories extends Component {
 							/>
 						)
 					})}
+					<BonusAndTotal 
+						name={'Bonus'} 
+						player={this.props.player}
+					/>
+					<BonusAndTotal 
+						name={'Total Score'} 
+						player={this.props.player}
+					/>
 				</tbody>
 			</table>
 		)
@@ -205,8 +214,4 @@ function kismet(dice) {
 		return dice.reduce(getSum);
 
 	return 0;
-}
-
-function totalScore(dice) {
-	return this.score.reduce(getSum);
 }

@@ -7,23 +7,13 @@ class Category extends Component {
 	constructor(props) {
 		super(props);	
 		this.onClick = this.onClick.bind(this);
-		this.tryMove = this.tryMove.bind(this);
 		this.blank = '    __';
 	}
 
 	onClick() {
 		var sorted_dice = this.props.dice.slice().sort();
 		var score = this.props.rule(sorted_dice);
-		this.tryMove(score);
-	}
-
-	tryMove(score) {
-		var p1 = this.props.player == 1;
-		var updated_categories;
-		updated_categories = p1 ? this.props.p1_cats.slice() : this.props.p2_cats.slice();
-		updated_categories[this.props.cat] = score;
-		updated_categories[15] += score;
-		this.props.updateScore(p1, updated_categories);
+		this.props.updateScore(this.props.player, score, this.props.cat);
 		this.props.updateTurn();
 	}
 
@@ -49,7 +39,7 @@ class Category extends Component {
 					<button 
 						className='cat-button' 
 						onClick={this.onClick}
-						disabled={already_scored}
+						disabled={already_scored || this.props.player != this.props.turn || this.props.rolls_left == 3}
 						style={this.props.player == 1 ? 
 						{'background-color': blue} : {'background-color': magenta} }
 					/>
@@ -60,7 +50,9 @@ class Category extends Component {
 }
 
 const mapStateToProps = state => ({
+	turn: state.board.turn,
 	dice: state.board.dice,
+	rolls_left: state.board.rolls_left,
 	p1_cats: state.score.p1_categories,
 	p2_cats: state.score.p2_categories
 })

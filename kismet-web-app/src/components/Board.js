@@ -13,12 +13,16 @@ class Board extends Component {
 		console.log("Game over!");
 	}
 
+	checkBonus() {
+		
+	}
+
 	render() {
 		return (
 			<div className='board'>
 				<div className='round-dummy'>
 				Round: {this.props.round} <br /> 
-				player {this.props.turn + 1}'s turn <br />
+				player {this.props.turn}'s turn <br />
 				{this.props.rolls_left} rolls left 
 				</div>	
 				<div className='category-container'>			
