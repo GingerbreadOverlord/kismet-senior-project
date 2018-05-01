@@ -1,4 +1,5 @@
-import { UPDATE_TURN, NUM_PLAYERS, UPDATE_DICE, RESET_BOARD, TOGGLE_HIGHLIGHTED, GAME_IS_OVER } from './constants.js';
+import { UPDATE_TURN, NUM_PLAYERS, UPDATE_DICE, RESET_BOARD, 
+		 GAME_IS_OVER, NEXT_ROLL, REFRESH_DICE, MAKE_CALL } from './constants.js';
 
 export const updateTurn = () => ({
 	type: UPDATE_TURN
@@ -9,14 +10,10 @@ export const numPlayers = players => ({
 	players: players
 })
 
-export const updateDice = dice => ({
+export const updateDice = (val, i) => ({
 	type: UPDATE_DICE,
-	dice: dice
-})
-
-export const toggleHighlighted = highlighted => ({
-	type: TOGGLE_HIGHLIGHTED,
-	highlighted: highlighted
+	val: val,
+	i: i
 })
 
 export const gameIsOver = () => ({
@@ -25,4 +22,16 @@ export const gameIsOver = () => ({
 
 export const resetBoard = () => ({
 	type: RESET_BOARD
+})
+
+export const nextRoll = () => ({
+	type: NEXT_ROLL
+})
+
+export const refreshDice = () => ({
+	type: REFRESH_DICE
+})
+
+export const makeCall = () => ({
+	type: MAKE_CALL
 })

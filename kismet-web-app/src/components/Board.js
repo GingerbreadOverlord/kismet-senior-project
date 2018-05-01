@@ -14,7 +14,6 @@ class Board extends Component {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.round == 16) 
 			this.props.gameIsOver();
-		console.log(this.props.game_over);
 	}
 
 	render() {
