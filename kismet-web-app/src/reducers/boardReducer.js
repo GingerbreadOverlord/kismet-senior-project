@@ -1,16 +1,18 @@
-import { UPDATE_TURN, NUM_PLAYERS, UPDATE_DICE, RESET_BOARD,
-		 GAME_IS_OVER, NEXT_ROLL, REFRESH_DICE, MAKE_CALL } from '../actions/constants';
+import { UPDATE_TURN, NUM_PLAYERS, ROLL_DICE, RESET_BOARD,
+		 GAME_IS_OVER, TOGGLE_HIGHLIGHTED } from '../actions/constants';
 
 const initialState = {
 	turn: 1,
-	roll_time: 0,
 	round: 1,
 	players: 2,
-	dice: Array(5).fill(null),
-	disabled: Array(5).fill(true),
+	dice: [randomRoll(), randomRoll(), randomRoll(), randomRoll(), randomRoll()],
+	highlighted: Array(5).fill(true),
 	rolls_left: 3,
 	game_over: false,
-	initial_calls: 0
+}
+
+function randomRoll() {
+	return Math.floor(Math.random() * 6) + 1; 
 }
 
 export default function(state=initialState, action) {
@@ -37,41 +39,33 @@ export default function(state=initialState, action) {
 				turn: next_turn,
 				round: next_round,
 				rolls_left: 3,
-				disabled: Array(5).fill(true),
-				initial_calls: 5
+				highlighted: Array(5).fill(true),
 			};
-		case UPDATE_DICE:
+		case ROLL_DICE:
 			var new_dice = state.dice.slice();
-			var new_disabled = state.disabled.slice();
-			new_dice[action.i] = action.val;
-			new_disabled[action.i] = true;
-			console.log(action.val, action.i, state.dice, new_dice, new_disabled);
-			return {
-				...state,
-				dice: new_dice,
-				disabled: new_disabled
-			};
-		case NEXT_ROLL:
+
+			for (let i = 0; i < new_dice.length; i++) {
+				if (state.highlighted[i]) 
+					new_dice[i] = randomRoll();
+			}
+
 			return {
 				...state,
 				rolls_left: state.rolls_left - 1,
-				disabled: Array(5).fill(false)
-			}
-		case REFRESH_DICE:
+				dice: new_dice,
+				highlighted: Array(5).fill(false)
+			};
+		case TOGGLE_HIGHLIGHTED:
+			var new_highlighted = state.highlighted.slice();
+			new_highlighted[action.i] = !state.highlighted[action.i];
 			return {
 				...state,
-				disabled: Array(5).fill(false)
+				highlighted: new_highlighted
 			}
 		case GAME_IS_OVER:
 			return {
 				...state,
 				game_over: true
-			}
-		case MAKE_CALL:
-			console.log('we here');
-			return {
-				...state,
-				initial_calls: state.initial_calls + 1
 			}
 		case RESET_BOARD:
 			return initialState;

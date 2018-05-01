@@ -1,11 +1,9 @@
 export const FETCH_DICE = "FETCH_DICE";
-export const UPDATE_DICE = "UPDATE_DICE";
+export const ROLL_DICE = "ROLL_DICE";
 export const UPDATE_SCORE = "UPDATE_SCORE";
 export const UPDATE_TURN = "UPDATE_TURN";
 export const NUM_PLAYERS = "NUM_PLAYERS";
 export const RESET_BOARD = "RESET_BOARD";
 export const RESET_SCORES = "RESET_SCORES";
 export const GAME_IS_OVER = "GAME_IS_OVER";
-export const NEXT_ROLL = "NEXT_ROLL";
-export const REFRESH_DICE = "REFRESH_DICE";
-export const MAKE_CALL = "MAKE_CALL";
+export const TOGGLE_HIGHLIGHTED = "TOGGLE_HIGHLIGHTED";
