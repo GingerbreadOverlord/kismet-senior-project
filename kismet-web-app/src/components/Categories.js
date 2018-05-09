@@ -26,8 +26,12 @@ export default class Categories extends Component {
 	}
 
 	render() {
+		var style = this.props.player == 1 ? 
+			{ backgroundColor: "#468499", color: "#FFFFFF"} :
+			{ backgroundColor: "#f08080" , color: "#FFFFFF"}
+
 		return (
-			<table className='category-table'>
+			<table className='category-table' style={style}>
 				<tbody>
 					{this.cat_names.map((name, i) => {
 						return (

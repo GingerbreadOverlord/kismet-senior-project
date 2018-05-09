@@ -28,8 +28,8 @@ class Category extends Component {
 			(this.props.p1_cats[this.props.cat] == null ? false : true) :
 			(this.props.p2_cats[this.props.cat] == null ? false : true);
 		
-		var style_p1 = { 'backgroundColor': '#0000EE' };
-		var style_p2 = { 'backgroundColor': '#FF00FF' };
+		var style_p1 = { 'backgroundColor': '#b4eeb4' };
+		var style_p2 = { 'backgroundColor': '#b0e0e6' };
 
 		return (
 			<tr>

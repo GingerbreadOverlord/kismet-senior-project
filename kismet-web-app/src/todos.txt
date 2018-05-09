@@ -1,2 +1,0 @@
-2 player
-scoring dice from previous turn

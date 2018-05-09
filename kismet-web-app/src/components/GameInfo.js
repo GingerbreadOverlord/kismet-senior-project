@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 class GameInfo extends Component {
 	render() {
 		return (
-			<ul className='board-info'>
+			<ul className='board-info' style={{color: "#FFFFFF"}}>
 				<li>Round: {this.props.round}</li>
 				<li>Turn: Player {this.props.turn}</li>
 				<li>Rolls Left: {this.props.rolls_left}</li>

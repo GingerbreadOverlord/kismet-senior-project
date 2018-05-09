@@ -26,8 +26,10 @@ class Board extends Component {
 					<GameInfo />
 					<Dice />
 				</div>
+				<div style={{width: '60px'}}></div>
 				<div className='category-container'>			
 					<Categories player={1}/>
+					{this.props.game_type == 'solo' ? null: <div style={{width: '60px'}}></div>}
 					{this.props.game_type == 'solo' ? null : <Categories player={2}/>}
 				</div>
 			</div>
