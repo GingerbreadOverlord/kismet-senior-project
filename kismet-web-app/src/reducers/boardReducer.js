@@ -1,14 +1,17 @@
-import { UPDATE_TURN, NUM_PLAYERS, ROLL_DICE, RESET_BOARD,
-		 GAME_IS_OVER, TOGGLE_HIGHLIGHTED } from '../actions/constants';
+import { UPDATE_TURN, GAME_TYPE, ROLL_DICE, RESET_BOARD,
+		 GAME_IS_OVER, TOGGLE_HIGHLIGHTED, TOGGLE_START_SCREEN,
+		 TOGGLE_RULE_SHEET } from '../actions/constants';
 
 const initialState = {
 	turn: 1,
 	round: 1,
-	players: 2,
+	game_type: 'solo',
 	dice: [randomRoll(), randomRoll(), randomRoll(), randomRoll(), randomRoll()],
 	highlighted: Array(5).fill(true),
 	rolls_left: 3,
 	game_over: false,
+	rule_sheet: false,
+	start_screen: true
 }
 
 function randomRoll() {
@@ -17,15 +20,15 @@ function randomRoll() {
 
 export default function(state=initialState, action) {
 	switch(action.type) {
-		case NUM_PLAYERS:
+		case GAME_TYPE:
 			return {
 				...state,
-				players: action.players
+				game_type: action.game_type
 			}
 		case UPDATE_TURN:
 			var next_turn;
 			var next_round = state.round; 
-			if (state.players == 1) {
+			if (state.game_type == 'solo') {
 				next_turn = 1;
 				next_round = state.round + 1; 
 			}
@@ -66,6 +69,16 @@ export default function(state=initialState, action) {
 			return {
 				...state,
 				game_over: true
+			}
+		case TOGGLE_RULE_SHEET:
+			return {
+				...state,
+				rule_sheet: action.b
+			}
+		case TOGGLE_START_SCREEN:
+			return {
+				...state,
+				start_screen: action.b
 			}
 		case RESET_BOARD:
 			return initialState;

@@ -36,12 +36,14 @@ class Category extends Component {
 				<td>{this.props.name}</td>
 				<td>{which_cat}</td>
 				<td>
-					<button 
-						className='cat-button' 
-						onClick={this.onClick}
-						disabled={already_scored || this.props.player != this.props.turn || this.props.rolls_left == 3}
-						style={this.props.player == 1 ? style_p1 : style_p2}
-					/>
+					{(already_scored || this.props.player != this.props.turn || this.props.rolls_left == 3) ?
+						null :
+						<button 
+							className='cat-button' 
+							onClick={this.onClick}
+							style={this.props.player == 1 ? style_p1 : style_p2}
+						/>
+					}
 				</td>
 			</tr>
 		)

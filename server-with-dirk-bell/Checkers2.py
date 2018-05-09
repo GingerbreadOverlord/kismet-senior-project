@@ -9,6 +9,7 @@ This file contains the Checkers class. It allows checkers to be played
 by initializing the board, checking for legal moves, and checking if the game
 is over or not.
 """
+
 ###########################
 #checkers class
 class checkers():
@@ -112,7 +113,7 @@ class checkers():
 		if (x1 - x2 != 2) and (x2 - x1 != 2):
 			item.socket.send("ERROR: Invalid double jump.\n")
 
-		print(str(x1) + " ", str(y1) + " ", str(x2) + " ", str(y2) + " ")
+		print str(x1) + " ", str(y1) + " ", str(x2) + " ", str(y2) + " "
 		if x1 > 7 or y1 > 7 or x2 > 7 or y2 > 7:
 			item.socket.send("ERROR: Input must not be larger than 8.\n")
 			return False
@@ -235,7 +236,7 @@ class checkers():
 ###########################
 #CHECK_MOVE FUNCTION, CHECKS FOR VALID MOVE INPUT
 	def check_move(self, x1, y1, x2, y2, item):
-		print(str(x1) + " ", str(y1) + " ", str(x2) + " ", str(y2) + " ")
+		print str(x1) + " ", str(y1) + " ", str(x2) + " ", str(y2) + " "
 		if x1 > 7 or y1 > 7 or x2 > 7 or y2 > 7:
 			item.socket.send("ERROR: Input must not be larger than 8.\n")
 			return False

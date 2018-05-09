@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Board from './Board'
+import Board from './Board';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
@@ -24,7 +24,7 @@ export default class App extends Component {
 	render() {
 	return (
 		<Provider store={store}>
-		  <Board />
+			<Board />
 		</Provider>
 	);
 	}

@@ -15,7 +15,7 @@ class Dice(object):
 		if x < 1 or x > 5:
 			return rolls
 
-		for i in xrange(x):
+		for i in range(x):
 			rolls.append(self.rollOneDice())
 
 		return rolls
@@ -95,7 +95,7 @@ class TwoPairSameColor(Category):
 
 class ThreeOfAKind(Category):
 	def score(self, dice):
-		for i in xrange(3):
+		for i in range(3):
 			if dice[i] == dice[i+1] == dice[i+2]:
 				return sum(dice)
 
@@ -131,7 +131,7 @@ class FullHouse(Category):
 			three_of_a_kind = (dice[way[0]], dice[way[0] + 1], dice[way[0] + 2])
 			pairx = dice[way[1]]
 			pairy = dice[way[2]]
-			print three_of_a_kind, pairx, pairy
+			#printthree_of_a_kind, pairx, pairy
 			if three_of_a_kind[0] == three_of_a_kind[1] == three_of_a_kind[2] and pairx == pairy:
 				return sum(dice) + 15
 
@@ -150,7 +150,7 @@ class FullHouseSameColor(Category):
 			three_of_a_kind = (dice[way[0]], dice[way[0] + 1], dice[way[0] + 2])
 			pairx = dice[way[1]]
 			pairy = dice[way[2]]
-			print three_of_a_kind, pairx, pairy
+			#print three_of_a_kind, pairx, pairy
 			if three_of_a_kind[0] == three_of_a_kind[1] == three_of_a_kind[2] and pairx == pairy and \
 			   self.sameColor(three_of_a_kind[0], pairx):
 				return sum(dice) + 20
@@ -160,7 +160,7 @@ class FullHouseSameColor(Category):
 
 class FourOfAKind(Category):
 	def score(self, dice):
-		for i in xrange(2):
+		for i in range(2):
 			if dice[i] == dice[i+1] == dice[i+2] == dice[i+3]:
 				return sum(dice) + 25
 
@@ -206,60 +206,135 @@ class Board(object):
 		self.player2_score = [None]*15
 
 	@staticmethod
-	def printDice(dice):
-		print "dice:",  " ".join(map(str, dice))
+	def printDice(dice, player1, player2):
+		player1.socket.send(" Dice: ".join(map(str,dice)) +"\n")
+		player2.socket.send(" Dice: ".join(map(str,dice))+"\n")
+		# print("dice:",  " ".join(map(str, dice)))
 
 	def playGame(self, player2=False):
-		print "welcome to Kismet"
-		print "colors: 1&6, 2&5, 3&4"
-		print "categories: ones twos threes fours fives sixes 2pairSC(7) 3(8) straight(9) Flush(10) FH(11) FHSC(12) 4(13) Yara(14) Kismet(15)"
+		print("welcome to Kismet")
+		print("colors: 1&6, 2&5, 3&4")
+		print("categories: ones twos threes fours fives sixes 2pairSC(7) 3(8) straight(9) Flush(10) FH(11) FHSC(12) 4(13) Yara(14) Kismet(15)")
 		if not player2:
 			self.onePlayer()
 		else:
 			self.twoPlayer()
 
-	def onePlayer(self):
+	def onePlayer(self, player1, player2):
+
+		#Basically need to figure out how to play with 2 people!
 		d = Dice()
+		d2 = Dice()
 
-		while self.turn <= self.max_turn:
-			print "score", self.player1_score
-			dice = d.standardRoll()
-			rolls = 1
+		counter = 0;
 
-			while True:
-				self.printDice(dice)
-				sys.stdout.flush()
-				line = raw_input().strip().split()
-				if line[0] == "score":
-					c = int(line[1])
-					if 1 <= c <= self.category_count and self.player1_score[c-1] is None:
-						self.player1_score[c-1] = self.categories[c].applyRule(dice)
-						print "scored into category", c
-						break
-				elif line[0] == "reroll" and rolls < 3:
-					if len(line) == 1:
-						dice = d.standardRoll()
-					else:
-						rerolled = line[1:]
-						new_dice = d.rollXTimes(len(rerolled))
-						for i, r in enumerate(new_dice):
-							dice[int(rerolled[i])-1] = r
-						print "rerolled"
+		while (counter < 30):
+			player1.socket.send("Player 1 Score:" + str(self.player1_score) +"\n")
+			player1.socket.send("Player 2 Score:" + str(self.player2_score) +"\n")
+			player2.socket.send("Player 1 Score:" + str(self.player1_score)+"\n")
+			player2.socket.send("Player 2 Score:" + str(self.player2_score)+"\n")
 
-					rolls += 1
+			if counter % 2 == 0: #PLAYER 1!
+				dice = d.standardRoll()
+				rolls1 = 1
 
-			self.turn += 1
+				while True:
+					self.printDice(dice, player1, player2)
+					sys.stdout.flush()
+					player1.socket.send("Please enter input: score or reroll")
+					line = player1.socket.recv(1024).strip().split()
+					if line[0] == "score":
+						c = int(line[1])
+						if 1 <= c <= self.category_count and self.player1_score[c-1] is None:
+							self.player1_score[c-1] = self.categories[c].applyRule(dice)
+							player1.socket.send("Scored into category" + str(c))
+							break
+					elif(line[0] == "reroll" and rolls1 < 3):
+						if len(line) == 1:
+							dice = d.standardRoll()
+						else:
+							rerolled = line[1:]
+							new_dice = d.rollXTimes(len(rerolled))
+							for i, r in enumerate(new_dice):
+								dice[int(rerolled[i]) - 1] = r
+							player1.socket.send("rerolled")
+						rolls1 += 1
+				self.turn += 1
 
-		print self.player1_score
-		print "total score", sum(self.player1_score)
+
+
+			else: #PLAYER 2!
+				dice2 = d2.standardRoll()
+				rolls2 = 1
+
+				while True:
+					self.printDice(dice2, player1, player2)
+					sys.stdout.flush()
+					player2.socket.send("Please enter input: score or reroll:")
+					line = player2.socket.recv(1024).strip().split()
+					if line[0] == "score":
+						c = int(line[1])
+						if 1 <= c <= self.category_count and self.player2_score[c-1] is None:
+							self.player2_score[c-1] = self.categories[c].applyRule(dice2)
+							player2.socket.send("Scored into category" + str(c))
+							break
+					elif(line[0] == "reroll" and rolls2 < 3):
+						if len(line) == 1:
+							dice2 = d2.standardRoll()
+						else:
+							rerolled = line[1:]
+							new_dice = d2.rollXTimes(len(rerolled))
+							for i, r in enumerate(new_dice):
+								dice2[int(rerolled[i]) - 1] = r
+							player2.socket.send("rerolled")
+
+						rolls2 += 1
+
+				self.turn += 1
+
+			player1.socket.send("Player 1 Score: " + str(self.player1_score)+"\n")
+			player1.socket.send("Player 2 Score: " + str(self.player2_score)+"\n")
+			player2.socket.send("Player 1 Score: " + str(self.player1_score)+"\n")
+			player2.socket.send("Player 2 Score: " + str(self.player2_score)+"\n")
+			player1.socket.send("Player 1 Total Score: " + str(sum(self.player1_score))+"\n")
+			player1.socket.send("Player 2 Total Score: " + str(sum(self.player2_score))+"\n")
+			player2.socket.send("Player 1 Total Score: " + str(sum(self.player1_score))+"\n")
+			player2.socket.send("Player 2 Total Score: " + str(sum(self.player2_score))+"\n")
+	return
+	
+		# while self.turn <= self.max_turn:
+		# 	print("score", self.player1_score)
+		# 	dice = d.standardRoll()
+		# 	rolls = 1
+
+		# 	while True:
+		# 		self.printDice(dice)
+		# 		sys.stdout.flush()
+		# 		line = input().strip().split()
+		# 		if line[0] == "score":
+		# 			c = int(line[1])
+		# 			if 1 <= c <= self.category_count and self.player1_score[c-1] is None:
+		# 				self.player1_score[c-1] = self.categories[c].applyRule(dice)
+		# 				print("scored into category", c)
+		# 				break
+		# 		elif line[0] == "reroll" and rolls < 3:
+		# 			if len(line) == 1:
+		# 				dice = d.standardRoll()
+		# 			else:
+		# 				rerolled = line[1:]
+		# 				new_dice = d.rollXTimes(len(rerolled))
+		# 				for i, r in enumerate(new_dice):
+		# 					dice[int(rerolled[i])-1] = r
+		# 				print("rerolled")
+
+		# 			rolls += 1
+
+		# 	self.turn += 1
+
+		# print(self.player1_score)
+		# print("total score", sum(self.player1_score))
 
 	def twoPlayer(self):
 		pass
 
 
-if __name__ == "__main__":
-	KismetBoard = Board()
-	if len(sys.argv) == 1:
-		KismetBoard.playGame()
-	else:
-		KismetBoard.playGame(True)

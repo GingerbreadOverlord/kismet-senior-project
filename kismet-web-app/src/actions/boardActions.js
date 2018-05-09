@@ -1,13 +1,14 @@
-import { UPDATE_TURN, NUM_PLAYERS, ROLL_DICE, RESET_BOARD, 
-		 GAME_IS_OVER, TOGGLE_HIGHLIGHTED } from './constants.js';
+import { UPDATE_TURN, GAME_TYPE, ROLL_DICE, RESET_BOARD, 
+		 GAME_IS_OVER, TOGGLE_HIGHLIGHTED, TOGGLE_RULE_SHEET,
+		 TOGGLE_START_SCREEN } from './constants.js';
 
 export const updateTurn = () => ({
 	type: UPDATE_TURN
 })
 
-export const numPlayers = players => ({
-	type: NUM_PLAYERS,
-	players: players
+export const gameType = game_type => ({
+	type: GAME_TYPE,
+	game_type: game_type
 })
 
 export const rollDice = dice => ({
@@ -26,4 +27,14 @@ export const resetBoard = () => ({
 export const toggleHighlighted = i => ({
 	type: TOGGLE_HIGHLIGHTED,
 	i: i
+})
+
+export const toggleRuleSheet = b => ({
+	type: TOGGLE_RULE_SHEET,
+	b: b 
+})
+
+export const toggleStartScreen = b => ({
+	type: TOGGLE_START_SCREEN,
+	b: b 
 })

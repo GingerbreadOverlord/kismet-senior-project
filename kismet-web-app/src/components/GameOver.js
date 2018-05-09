@@ -20,8 +20,8 @@ class GameOver extends Component {
 		var winner = this.props.p1_total > this.props.p2_total ? 1 : 2;
 
 		return (
-			<div className='game-over-container'>
-				<div className='game-over-center'>
+			<div className='fill-screen-containerr'>
+				<div className='fill-screen-center'>
 					<div>{tie ? "It's a tie!" : winner == 1 ? "Player 1 wins!" : "Player 2 wins!"}</div>
 					<div>{this.props.p1_total}  :  {this.props.p2_total}</div>
 					<button 

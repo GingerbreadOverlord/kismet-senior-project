@@ -7,7 +7,8 @@ import psycopg2
 import uuid
 import time
 from random import randint
-from Checkers import *
+from Checkers2 import *
+from k import *
 
 HOST = socket.gethostname() 
 PORT = 5004
@@ -35,7 +36,7 @@ class ClientThread(threading.Thread):
         self.username = None
         self.user_id = None
         self.waiting = False
-        print("[+] New thread started for "+ip+":"+str(PORT))
+        print "[+] New thread started for "+ip+":"+str(PORT)
 
 ##########################
 #LOG IN FUNCTION
@@ -65,7 +66,7 @@ class ClientThread(threading.Thread):
                 self.socket.send("\nInvalid Username Or Password!!\n")
 
         #notify the server that a client has logged in
-        print("User LOGGED IN!")
+        print "User LOGGED IN!"
 
         #set the clients username and user_id
         self.username = username
@@ -122,7 +123,7 @@ class ClientThread(threading.Thread):
         self.user_id = unique_id
 
         #notify server that a new client has been connected
-        print("NEW ACCOUNT CREATED: " + self.username)
+        print "NEW ACCOUNT CREATED: " + self.username
         #return to main menu
         self.run()
 
@@ -130,7 +131,7 @@ class ClientThread(threading.Thread):
 #LIST OPTIONS
 ##########################
     def options(self):
-        print("options")
+        print "options"
 
 ##########################
 #PLAY GAME
@@ -163,7 +164,7 @@ class ClientThread(threading.Thread):
 
             #create copy of board
             board2.board = dict(board.board)
-            print(board.board_printer())
+            print board.board_printer()
 
             #Set up string with board to send to client
             scheme = board.board_printer()
@@ -265,6 +266,27 @@ class ClientThread(threading.Thread):
                 self.socket.send("Black Wins")
                 return True
 
+
+
+
+##########################
+#PLAY Game FUNCTION
+##########################
+    def play_game2(self, player1, player2, game_id):
+
+        self.cursor.execute("INSERT INTO active_games (user_id_1, user_id_2, game_id, game_type) VALUES(%s, %s, %s, %s)", (player1, player2, game_id, "CHECKERS"))
+
+        for item in threads:
+            if (item.username == player2 and item.waiting == True):
+                opponent = item
+
+            KismetBoard = Board()
+            opponent.found = True
+            KismetBoard.onePlayer(self, opponent)
+            opponent.waiting = False
+
+
+
 ##########################
 #PLAY Game FUNCTION
 ##########################
@@ -279,6 +301,10 @@ class ClientThread(threading.Thread):
         opponent.found = True
         self.play(opponent)
         opponent.waiting = False
+
+
+        # else:
+
 
 
 
@@ -331,25 +357,53 @@ class ClientThread(threading.Thread):
 
         #Create a game and add it to the list that people can accept from
         if (data == "Find Game" or data == "find game"):
+
+            self.socket.send("Please enter game type - Kismet or Checkers:")
+            gamer = self.socket.recv(1024);
+
+            while (gamer != "kismet" and gamer != "Kismet" and gamer != "checkers" and gamer != "Checkers"):
+                self.socket.send("ERROR: Invalid game type. Please enter: Kismet or Checkers:")
+                gamer = self.socket.recv(1024);
+
             self.waiting = True
             self.found = False
 
-            if not user_list:  
-                user_list.append(self.username)
-            else:
-                username = user_list.pop(0)
-                self.waiting = False
-                self.found = False
-                GI = str(user_id())
-                self.play_game(self.username, username, GI)
+            if (gamer == "Checkers" or gamer == "checkers"):
 
-            while(self.waiting == True):
-                if(self.found == False):
-                    self.socket.send("waiting for game...")
-                time.sleep(3)
+                if not user_list:  
+                    user_list.append(self.username)
+                else:
+                    username = user_list.pop(0)
+                    self.waiting = False
+                    self.found = False
+                    GI = str(user_id())
+                    self.play_game(self.username, username, GI)
+
+                while(self.waiting == True):
+                    if(self.found == False):
+                        self.socket.send("waiting for game...")
+                    time.sleep(3)
+
+
+            elif(gamer == "Kismet" or gamer == "kismet"):
+
+                if not kismet_list:  
+                    kismet_list.append(self.username)
+                else:
+                    username = kismet_list.pop(0)
+                    self.waiting = False
+                    self.found = False
+                    GI = str(user_id())
+                    self.play_game2(self.username, username, GI)
+
+                while(self.waiting == True):
+                    if(self.found == False):
+                        self.socket.send("waiting for kismet game...")
+                    time.sleep(3)
 
             self.waiting = False
             self.run()
+
 
 
         #
@@ -368,7 +422,7 @@ class ClientThread(threading.Thread):
 ##########################
     def run(self):
 
-        print("Connection from : "+self.ip+":"+str(self.port))
+        print "Connection from : "+self.ip+":"+str(self.port)
 
         #check if client is logged in
         if(self.username is not None):
@@ -427,11 +481,11 @@ def main():
         conn = psycopg2.connect("dbname='cpsc490' user='postgres'")
         conn.autocommit = True
     except:
-        print("Unable to connect to the Database. Exiting.")
+        print "Unable to connect to the Database. Exiting."
         return 0
 
     cursor = conn.cursor()
-    print("Connected to Database!")
+    print "Connected to Database!"
 
 
 
@@ -441,12 +495,12 @@ def main():
     tcpsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     tcpsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    tcpsock.bind((HOST,PORT))
+    tcpsock.bind((HOST,PORT)) 
 
 
     while True:
         tcpsock.listen(100)
-        print("\nListening for incoming connections...")
+        print "\nListening for incoming connections..."
         serverip, serverport = tcpsock.getsockname()
         (clientsock, (ip, PORT)) = tcpsock.accept()
         newthread = ClientThread(ip, PORT, clientsock, cursor)
@@ -454,13 +508,14 @@ def main():
         threads.append(newthread)
 
     for t in threads:
-        print("what")
+        print "what"
         t.join()
 
 
 
 threads = []
 user_list = []
+kismet_list = []
 
 main()
 

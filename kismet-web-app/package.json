@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "ajv": "^6.0.0",
+    "net": "^1.0.2",
     "react": "^16.3.2",
     "react-dice": "^1.0.1",
     "react-dice-complete": "^1.0.2",
